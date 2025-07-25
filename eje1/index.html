@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Figuras Geométricas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 350px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #2b8a3e;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #237032;
+    }
+
+    .resultado {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Calculadora Geométrica</h2>
+    <label for="figura">Figura:</label>
+    <select id="figura" onchange="mostrarCampos()">
+      <option value="">Selecciona una figura</option>
+      <option value="triangulo">Triángulo</option>
+      <option value="rectangulo">Rectángulo</option>
+      <option value="cuadrado">Cuadrado</option>
+      <option value="circulo">Círculo</option>
+    </select>
+
+    <label for="operacion">Operación:</label>
+    <select id="operacion">
+      <option value="">Selecciona operación</option>
+      <option value="area">Área</option>
+      <option value="perimetro">Perímetro</option>
+    </select>
+
+    <div id="inputsExtras"></div>
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div class="resultado" id="resultado"></div>
+  </div>
+
+  <script>
+    function mostrarCampos() {
+      const figura = document.getElementById("figura").value;
+      const inputs = document.getElementById("inputsExtras");
+      inputs.innerHTML = "";
+
+      if (figura === "triangulo") {
+        inputs.innerHTML = `
+          <input type="number" id="a" placeholder="Lado a (solo para perímetro)">
+          <input type="number" id="b" placeholder="Base b">
+          <input type="number" id="c" placeholder="Lado c (solo para perímetro)">
+          <input type="number" id="h" placeholder="Altura h (solo para área)">
+        `;
+      } else if (figura === "rectangulo") {
+        inputs.innerHTML = `
+          <input type="number" id="a" placeholder="Altura a">
+          <input type="number" id="b" placeholder="Base b">
+        `;
+      } else if (figura === "cuadrado") {
+        inputs.innerHTML = `
+          <input type="number" id="a" placeholder="Lado a">
+        `;
+      } else if (figura === "circulo") {
+        inputs.innerHTML = `
+          <input type="number" id="r" placeholder="Radio r">
+        `;
+      }
+    }
+
+    function calcular() {
+      const figura = document.getElementById("figura").value;
+      const operacion = document.getElementById("operacion").value;
+      const resultado = document.getElementById("resultado");
+
+      let a = parseFloat(document.getElementById("a")?.value || 0);
+      let b = parseFloat(document.getElementById("b")?.value || 0);
+      let c = parseFloat(document.getElementById("c")?.value || 0);
+      let h = parseFloat(document.getElementById("h")?.value || 0);
+      let r = parseFloat(document.getElementById("r")?.value || 0);
+      let res = 0;
+
+      if (!figura || !operacion) {
+        resultado.innerText = "Selecciona una figura y una operación.";
+        return;
+      }
+
+      switch (figura) {
+        case "triangulo":
+          if (operacion === "area") {
+            res = (b * h) / 2;
+          } else {
+            res = a + b + c;
+          }
+          break;
+        case "rectangulo":
+          if (operacion === "area") {
+            res = a * b;
+          } else {
+            res = 2 * (a + b);
+          }
+          break;
+        case "cuadrado":
+          if (operacion === "area") {
+            res = a * a;
+          } else {
+            res = 4 * a;
+          }
+          break;
+        case "circulo":
+          if (operacion === "area") {
+            res = Math.PI * r * r;
+          } else {
+            res = 2 * Math.PI * r;
+          }
+          break;
+      }
+
+      resultado.innerText = `${operacion === "area" ? "Área" : "Perímetro"}: ${res.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
